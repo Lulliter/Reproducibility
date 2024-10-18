@@ -1,0 +1,681 @@
+---
+# title: "Principi, tecniche e strumenti per l'analisi riproducibile dei dati"
+# subtitle: "Seminario introduttivo - PCM, Dip. Politiche di Coesione, UdM PNRR"
+# author: 
+#   - "Luisa M. Mimmi"
+# date: "Last update : `r Sys.Date()`"  #"[Aggiornato il:] DD-MMM-YYYY"
+#date-format: "DD-MMM-YYYY" #"[Aggiornato il:] DD-MMM-YYYY"
+lang: it
+# format: pptx 
+tbl-cap-location: top
+format:
+  revealjs:
+    # ------------- x salvare come PDF 
+    standalone: true
+    embed-resources: true
+    # chalkboard:
+    #   buttons: true
+    theme:  default # sky # moon
+    # theme: ["theme/pp.scss"]
+    css: style.css
+    slide-number: c/t
+    incremental: false # can specify later
+    preview-links: auto
+    #logo: images/PCM_logo.png
+    #footer: Luisa M. Mimmi [Dip. Politiche di Coesione - UdM PNRR] # <https://quarto.org>
+    code-copy: true
+    center-title-slide: false
+    title-slide-attributes:
+        data-background-color: "#F2F2F2"
+        
+  # pptx:
+  #   incremental: false # can specify later
+  
+  # beamer:
+  #   incremental: false # can specify later
+  #   cap-location: top
+  #   tbl-cap-location: top
+  #   pdf-engine: xelatex
+---
+
+
+::: {.title}
+Seminario introduttivo su:  
+**"Principi, tecniche e strumenti per l'analisi riproducibile dei dati"**
+:::  
+
+::: {style="font-size: 75%"}
+::: {.subtitle}
+[Presidenza del Consiglio dei Ministri,  
+Dip. Politiche di Coesione, UdM PNRR]{style="color: #BD8723"}
+:::  
+:::
+\
+&nbsp;
+
+::: {.author}
+[Luisa M. Mimmi]{style="color: #854442"}
+:::  
+
+::: {.date}
+[`r format(Sys.time(), "%B %d, %Y")`]{style="color:#4c4c4c"}
+:::  
+
+ 
+
+## Temi del Seminario
+
+::: {style="font-size: 75%"}
+1.  Cosa s'intende per "riproducibilità"?
+<!-- -   Chi ne beneficia? E come? -->
+2. Perché condurre analisi con approccio riproducibile?
+3.  Buone pratiche da seguire (e/o errori comuni)
+    - organizzazione dei dati
+    - strumenti di analisi (cenni) 
+4.  Conclusioni e considerazioni
+
+::: 
+
+
+::: notes
+1. Con questo seminario ho voluto proporre un tema forse un po' insolito (e che anche in corsi specializzati non viene necessariamente insegnato!), ma ci tenevo perche invece ho scoperto **nella pratica** quanto poteva essere importante   
+
+2.  (non entrero troppo in dettagli tecnici) ma mi voglio soffermare sul PERCHE conviene impostare qualsiasi progetto di analisi di dati con un approccio riproducibile.
+
+3.  Proporro esempi pratici, che possano chiarire indipendentemente dalla tecnologia (software) che utilizziamo 
+
+4. Suggerire qualche esempio (SOLO ILLUSTRATIVO) di strumenti concreti (software e piattaforme)
+:::
+
+<!-- ## [1. Cos'è la "riproducibilità"?]{.r-fit-text} -->
+
+## Cos'è la "riproducibilità"?
+
+<!-- [![](images/reproducible-definition-grid_half.jpg){fig-alt="The Turing way" fig-align="center"}](https://github.com/alan-turing-institute/the-turing-way/blob/main/book/website/figures/reproducible-definition-grid.jpg) -->
+
+
+![](images/reproducible-definition-grid_half.jpg)
+
+::: {style="font-size: 60%"}
+-   [**RIPRODUCIBILE**]{.underline}: STESSO risultato dalla STESSA analisi sugli [**STESSI dati**]{style="color: #0a41a8"}
+-   **REPLICABILE**: STESSO risultato dalla STESSA analisi su [**DATI DIVERSI**]{style="color: #a80b42"}
+:::
+
+::: notes
+Vorrei fare una distinzione: --\> Forse se pensiamo a come progredisce la SCIENZA Sappiamo che la possibilità di *REPLICARE* un risultato (per esempio qd un ALTRO laboratorio ripete un'esperimento su un ALTRO campione di osservazioni...) e' la base del progresso scientifico.
+
+--\> La RIPRODUCIBILITÀ e' un concetto piu ristretto: infatti postula che otterrò lo stesso risultato ripercorrendo la STESSA ANALISI (con lo STESSO METODO), *SUGLI STESSI DATI*
+
+-   la RIPR (che secondo me ci riguarda più da vicino) e' venuto alla ribalta recentemente anche al di fuori del mondo strettamnete scientifico (quindi anche in ambito istituzionale e di business) ... e questo - a mio parere - in concomitanza con l'emergere della *data science* e il difforndersi di certe pratiche e tecnologie mututate al mondo del software che favoriscono un approccio riproducibile
+
+\[tant'e' vero che si potrebbe distinguere:\]
+
+```         
++ **Computational reproducibility**: When detailed information is provided about code, software, hardware and implementation details.
+
++ **Empirical reproducibility**: When detailed information is provided about non-computational empirical scientific experiments and observations. In practice, this is enabled by making the data and details of how it was collected freely available.
+
++ **Statistical reproducibility**: When detailed information is provided, for example, about the choice of statistical tests, model parameters, and threshold values. This mostly relates to pre-registration of study design to prevent p-value hacking and other manipulations.
+```
+:::
+
+##  Quando adottare tale approccio?
+
+
+::: {.absolute top="10%" left="0"}
+<!-- [![](images/research-cycle.jpeg){fig-align="center" width="850"}](https://github.com/alan-turing-institute/the-turing-way/blob/main/book/website/figures/research-cycle.jpg) -->
+
+![](images/research-cycle.jpeg){fig-align="center" width="70%"}
+
+:::
+
+
+
+<!-- ::: {.fragment .fade-in-then-out} -->
+<!-- ::: {.absolute top="45%" left="35%"} -->
+<!-- ::: {style="color: #cc0000"} -->
+<!-- *Sempre!* -->
+<!-- ::: -->
+<!-- ::: -->
+<!-- ::: -->
+
+
+
+::: notes
+Un progetto analitico comprende necessariamente alcune fasi (illustrate qui).
+
+```         
+0. Ideazione / piano
+1. Raccolta dei dati
+2. Pulizia/preparazione/trattamento dei dati
+3. Analisi e modellizzazione
+4. Pubblicazione dei risultati (report, articoli, visualizzazioni, ecc.)
+5. Archiviazione/ condivisione
+```
+
+Un approccio che possa dirsi riproducibile dovrebbe essere tale in TUTTE le fasi dell'analisi di dati... presuppone la condivisione di tutti i dati necessari (metadati), i codici di programmazione e le informazioni di contesto perchè qualcun'altro possa ri-eseguire l'analisi, ricreando i risultati.
+:::
+
+## Perché adottare un'approccio riproducibile? 
+
+::: columns
+::: {.column width="55%"}
+::: {style="font-size: 70%"}
+[***Chi ne beneficia?***]{.underline}
+
+1.  IO, soprattutto **nel futuro**
+2.  Colleghi/ co-autori
+3.  La comunità scientifica:
+    -   potrà studiare/ replicare/ estendere...
+4.  Editori e *peer-reviewers*
+5.  Revisori/ Controllori
+6.  Media/ Divulgatori
+:::
+:::
+
+
+::: {.column width="45%"}
+::: {style="font-size: 80%"}
+::: {style="color: #005ca1"}
+[***... se la mia analisi diventa:***]{.underline}
+
+1.  RI-UTILIZZABILE
+2.  COLLABORATIVA
+3.  TRASPARENTE / CITABILE
+4.  DIMOSTRABILE
+5.  CREDIBILE
+6.  ACCESSIBILE\
+:::
+:::
+:::
+
+:::
+
+::: notes
+Evidentemente questo comportera un lavoro, chi me lo fa fare? A chi serve?
+
+1.  IO --\> RI-USABILE: Posso ripercorrere/ modificare/ aggiornare analisi
+2.  COLLEGHI --\> COLLABORATIVA: Posso collaborare più facilmente
+3.  COMUNITA'/STEKEHOLDERS --\> TRASPARENTE: Più occasioni di visibilità, citazione, pubblicazioni, ecc.
+4.  EDITORI --\> DIMOSTRABILE: Più facile spiegare e rivedere il metodo usato
+5.  REVISORI --\> CREDIBILE: Posso giustificare conclusioni raggiunte
+6.  MEDIA --\> ACCESSIBILI: Trasparenza e chiarezza nel divulgare si risulati
+:::
+
+## Buone PRATICHE da seguire (e/o errori classici da evitare)
+
+## Organizzazione file
+
+::: columns
+::: {.column width="65%"}
+![](images/directory.png){.absolute top=100 left=0 width="700"}
+:::
+
+::: {.column width="35%"}
+::: {style="font-size: 55%"}
+
+- cartella **DATI_INPUT** in modalità [**"read only"**]{style="color: #a80b42"}
+<!-- - sottocartelle organizzate in base al progetto -->
+- struttura in [**sequenza logica**]{style="color: #a80b42"} ("01_caricamento", "02_pulizia")
+- nomi [**"machine readable"**]{style="color: #a80b42"}:
+    - (["Pessim@\ \ \ \ .Nom€ X FILE. 17 LuGlIo 2023.pdf"]{style="background-color:#e6cdcc"}) 
+    - brevi, senza troppi spazi o simboli (SOLO 1 ".")
+    - numerati con [*"left-padding"*]{style="color: #a80b42"} ("01_", "02_", "03_", ... "10_")
+    - convenzioni x estrarre informazioni (...[\_**fig**\_]{style="background-color:#FFFF00"}..., ...[\_**tab**\_]{style="background-color:#FFFF00"}...,  [**case\_**]{style="background-color:#FFFF00"}...)
+
+:::
+:::
+:::
+
+::: notes
+Un aspetto fondamentale per gestire la condivisione della ricerca e' la stessa organizzazione dei file. 
+
+Qui io ho messo un esempio, ma la struttura PUO e DEVE variare in base a ESIGENZE E PREFERENZE. 
+ci sono pero alcune convenzioni che sono essenziali e molto facilitanti 
+<!-- - clear guidelines  on where these digital objects should be held, handled and shared. -->
+<!-- - versioning -->
+<!-- - **naming files and folders** -->
+
+1. DATI INPUT (GREZZI) vogliamo assicurarci la possibilita di risalire al dato GREZZO (cosi come estratto alla fonte) da cui siamo partiti 
+(questo significa anche i metadati)
+2. puo esere utile nominare i file seguendo una sequenza logica 
+3. HUMAN READABLE Nome preferibile che contenga caratteri alfanumerici (e non caratteri speciali)
+4. MACHINE READABLE 
+    + "_"
+    + 1 UNICO "." 
+
+Piu io mi attengo a una certa convenzione concordata, piu e' facile lavorare coi file
+:::
+
+## Contenuto di un file (da incubo😱)
+
+::: columns 
+::: {.column width="65%"}
+![](images/BADexcel.png) 
+<!-- [(*Excel da incubo 😱*)]{style="color:red; font-size: 60%"} -->
+:::
+
+::: {.column width="35%"}
+::: {style="font-size: 50%"}
+-   **informazioni nascoste nella struttura**
+    - info [colore]{style="color:red"} o [sfondo]{style="background-color:#FFFF00"}
+    - righe/celle raggruppate o nascoste
+    - colonne con mix dati, formule, o commenti
+    - righe vuote
+
+-   **format specifici x localizzazione**:
+    -   🇺🇸 12-31-2023 o 🇮🇹 31-12-2023?
+    -   🇺🇸 \$ 100,000.5 o 🇮🇹 € 100.000,5?
+    -   ecc
+
+-   **cella vuota usata come "0" (e non "NULL")**
+<!-- 0 is actually data you measured (e.g. 0/1) whereas a BLANK CELL means that it wasn’t measured and the computer will interpret it as an unknown value (otherwise known as a NULL value) -->
+-   **valori nulli problematici (-999, -1, 0)**
+<!-- it’s a problem if unknown or missing data is recorded as -999, 999, or 0. Many statistical programs will not recognize that these are intended to represent missing (null) values.
+
+It is essential to use a clearly defined and consistent null indicator. Blanks (most applications) and NA (for R) are good choices.-->
+
+-   **link o formule NON esportabili**
+
+:::
+:::
+:::
+
+<!-- https://carpentries-incubator.github.io/fair-bio-practice/07-data-in-excel/index.html https://spreadsheetsoftware.com/avoid-becoming-a-spreadsheet-horror-story/ -->
+
+<!-- https://handsontable.com/blog/spreadsheet-horror-stories -->
+
+::: notes
+L'immagina a sinistra penso sia familiare a tutti quelli che hanno minimiamente lavorato in Excel: dietro alla comodita nel visualizzare dati, si nascondono vere e proprie insidie per quel che concerne la riproducibilita che sono principalmente dovute al modo in cui il foglio di calcolo viene strutturato e al modo in cui le informazini vengono offerte: 
+.... (vedi diapo)
+:::
+
+## Come strutturare i dati
+
+<!-- ::: {.fragment .fade-in-then-out} -->
+<!-- “Tidy datasets are all alike, but every messy dataset is messy in its own way.” ~ Hadley Wickham -->
+<!-- ::: -->
+
+ 
+
+> [***“Tidy datasets are all alike, but every messy dataset is messy in its own way.”***]{style="color: #a80b42"}
+
+~ Hadley Wickham
+ 
+
+
+
+
+::: notes
+Hadley Wickham (uno statistico e sviluppatore di R che ha un po' lanciato questa definizione di  "tidy data" (pubblicaz 2014) = dataset "ordinato" e' quello a docremmo arrivare quando prepariamo i dati per l'analisi 
+
+mi piace questa citazione xche ci spiega anche il nesso  dataset ordinato ~ riproducibilità... meglio uno standard condiviso (al posto di un casino personalizzato)!!!
+
+Tidy data is based on three core principles:
+
+    Each variable forms a column.
+    Each observation forms a row.
+    Each value in its own cell
+    Each type of observational unit forms a data table.
+:::
+
+## Come strutturare i dati (principi)
+
+::: columns
+::: {.column width="35%"}
+::: {style="font-size: 60%"}
+
+
+
+1. Ogni ***entità*** (tipo osservazioni) occupa una tabella [separata]{.underline} 
+2. Tabella ***"tidy"*** ≈ *"RETTANGOLARE"*
+    - ogni colonna una singola variabile
+    - ogni riga una singola  osservazione
+    - ogni cella un valore  
+3. Ogni tabella ha una [**chiave primaria** ]{style="color:#005ca1"} UNIVOCA x identificare le osservazioni 
+4. Ogni tabella contiene [**chiavi esterne**]{style="color:#e60066"} per costruire **relazioni** tra tabelle 
+
+<!-- 5. principi di normalizzazione  -->
+<!--   - una tabella è nella prima forma normale se non contiene colonne ripetute -->
+<!--   - ciascuna colonna in una tabella deve dipendere funzionalmente dalla chiave primaria completa di tale tabella -->
+<!--   - nessuna colonna di una tabella è dipendente da una colonna descrittore che, a sua volta, dipende dalla chiave primaria. -->
+<!--   - https://www.ibm.com/docs/it/informix-servers/12.10?topic=summary_of_normalization_rules -->
+ 
+::: 
+:::
+
+
+::: {.column width="65%"}
+```{r}
+#| echo: false
+
+set.seed(seed = 500)
+library(here)
+library(dplyr)
+library(kableExtra)
+library(gt)
+ 
+AL2_anagr_t <- readRDS("~/Github/Reproducibility/data/AL2_anagr_t.Rds")%>% 
+  dplyr::slice_sample(n = 1, by = misura, replace = F) %>% 
+   filter(misura != "FR") %>%
+  select(cup, misura, titolo_l) #9,
+#paint::paint(AL2_anagr_t )
+
+AL2_localiz_t_mergprov_t <- readRDS("~/Github/Reproducibility/data/AL2_localiz_t_mergprov_t.Rds") %>% 
+  inner_join(AL2_anagr_t, by = "cup") %>% 
+  select(regione, provincia, cup  )
+ 
+```
+
+
+```{r}
+#| tbl-cap: "Tab 1 Progetti"
+AL2_anagr_t %>% gt() %>%  cols_align(
+    align = "left")  %>% 
+  tab_style(
+    style = cell_text(color = "#005ca1" ),
+    locations = (cells_column_labels (columns =  cup))
+  ) %>% 
+  tab_style(
+    style = cell_text( weight = "bold"),
+    locations = (cells_column_labels (columns = everything()))
+  ) %>% 
+  tab_style(
+    style = cell_text(color = "#e68000"),
+    locations = cells_body(columns = cup,
+      rows = cup == "H92B22005410006")
+  )
+```
+
+```{r}
+#| tbl-cap: "Tab 2 Provincie"
+AL2_localiz_t_mergprov_t %>% gt() %>% cols_align(
+    align = "left" 
+) %>% 
+  tab_style(
+    style = cell_text(color = "#e60066" ),
+    locations = (cells_column_labels (columns =  cup))
+  ) %>% 
+  tab_style(
+    style = cell_text( weight = "bold"),
+    locations = (cells_column_labels (columns = everything()))
+  ) %>% 
+  tab_style(
+    style = cell_text(color = "#e68000"),
+    locations = cells_body(columns = cup,
+      rows = cup == "H92B22005410006")
+  )
+```
+:::
+:::
+
+::: notes
+E" molto probabile che per analizzare dei dati ci ritroveremo a organizzarli in tabelle. LA forma considerata ottimale "tidy" e' quella rappresentata in figura 
+
+https://arimoroolayinka.medium.com/a-gentle-introduction-to-tidy-data-in-r-b6673b4d304c
+:::
+
+
+## Importanza dei metadati
+
+::: columns 
+::: {.column width="50%"}
+**DATI** 
+![](images/IMG_7409.jpeg)
+:::
+
+::: {.column width="50%"}
+[**METADATI**]{style="background-color:#FFFF00"}
+
+::: {style="font-size: 65%"}
++ **Data**: 9 luglio 2023
++ **Luogo**: Monviso
++ **Risoluzione**: 4032x3024
++ **Dimensione file**: 3,5 MB
++ **Formato file**: .jpeg
++ ... 
+
+:::
+:::
+:::
+
+## "Data Codebook" (Codice dei dati)
+
+::: columns 
+::: {.column width="70%"}
+ 
+  
+![*E.g. PROCEDURE DI ATTIVAZIONE (Fonte: PUC)*](images/PRATT_datadic.png)
+:::
+
+::: {.column width="30%"}
+::: {style="font-size: 65%"}
+
+[**CONTIENE**]{style="background-color:#FFFF00"}
+ 
++ **Nome delle variabili**: [...]  
++ **Tipo**: [Numero, testo, data, ...]
++ **Formato**: [...]  
++ **Range di valori**: [Vedi Tabella ZPTIPO_PRATT]   
+
+:::
+:::
+:::
+
+
+ 
+::: notes
+Alongside your new spreadsheet, you should also create two things, a data dictionary and a data diary
+
++ A data dictionary is a file that explains what each column header in your spreadsheet is, along with information on the source of the data.
+  + descriptive range names
++ A data diary has all the queries and notes about the data set in one place. It’s important to keep track of your steps in your data diary, so you can reproduce the work if you need to, later on.
+ 
+https://tsh-website.netlify.app/tutorials/project-setup/principles-of-project-setup-and-workflow-management/documenting-data/ 
+:::
+
+## Altre tecniche per analisi riproducibile (cenni)
+
+::: {style="font-size: 70%"}
+1. Modificare i file di dati tramite **"script"** (codici)  ---invece che a mano 
+    - R, Python, Stata, Excel macro          
+2. **Automatizzare** operazioni ripetute
+    - ["DRY" (Don’t Repeat Yourself!)]{style="color: #005ca1"}
+    - Organizzare procedure in funzioni dedicate (x pulire i dati, creare grafici...) 
+3. Adottare **controllo di versione** per i file
+    - Git, Github, OSF 
+4. Utilizzare software ***open source*** (ove possibile)  
+5. Usare e creare **open data** (ove possibile) 
+
+<!-- - [License your software](https://kbroman.org/steps2rr/pages/licenses.html) -->
+
+:::
+
+::: notes
+Queste sono tecniche che andrebbero affrontate con strumento /software specifico 
+
+In realtà l'esigenza di [anonomization/privacy] è evidentemente in tensione con il principio della trasparenza (OPEN data) 
+
+- però la riproducibilità è fare tutti i passi perchè si possa anche solo in modo selezionato condividere
+:::
+
+
+
+## Automatizzazione (esempio)
+::: {style="font-size: 50%"}
+
+[**PROBLEMA**: Riga sfalsata esportando da REGIS]{style="color: #a80b42"}
+![](images/ErroreEXCEL.png) 
+
+
+<!-- ::: {.fragment .fade-in-then-semi-out} -->
+[**SOLUZIONE**: Funzione in R per correggere file esportati]{style="color: #0a41a8"}
+
+``` r
+f_fix_1row_meas <- function(old_df_name, new_df_name){
+   temp_1 <- old_df_name %>% 
+     dplyr::select(1:matches("Measures")) %>% 
+     janitor::row_to_names(1)
+   temp_2 <- old_df_name %>% 
+     dplyr::select(-(1:matches("Measures"))) %>% 
+     dplyr::slice(-1)
+  new_df_name <- dplyr::bind_cols(temp_1, temp_2)
+}
+```
+
+:::
+
+
+
+<!-- ::: -->
+
+
+::: notes
+Qui voglio solo accennare a questo aspetto perche occorrerebbe trattare un software in dettaglio. 
+
+quando mi trovo davanti l'esigenza di ripetere una operazione (ad esempio nel pulire i dati) E" BUONA NORMA AUTOMATIZZARE LA PROCEDURA
+
+un esempio banale e' quando scarichiamo i data da REGIS in AL, c'e' questa prima riga sfalsata che NON E" TIDY 
+...
+
+IL VANTAGGIO E" anche AVER RESO ESPLICITO QEUSTO PASSAGGIO
+<!-- qui un po di consigli x Exel users https://arxiv.org/ftp/arxiv/papers/1301/1301.5878.pdf -->
+:::
+
+## Controllo di versione
+
+::: columns
+::: {.column width="50%"}
+![](images/finaldoc.gif){fig-align="left" width="80%"}
+:::
+::: {.column width="50%"}
+<!-- ::: {.fragment .fade-in-then-semi-out} -->
+::: {style="font-size: 65%"}
+
+- Pratica mutuata dal mondo software, ma sempre più utilizzata 
+- Vari strumenti per il [***controllo di versione***]{style="color: #005ca1"} di file
+
+
+![](images/VC_range.png){fig-align="center" width="80%"}
+:::
+<!-- ::: -->
+:::
+:::
+
+
+::: notes
+Il controllo di versione è un sistema che registra, nel tempo, i cambiamenti ad un file o ad una serie di file, così da avere un unico FILE, di cui pero posso richiamare una specifica versione in ogni momento. 
+:::
+
+
+## Conclusioni
+
+::: {style="font-size: 50%"}
+
+#### [**SPUNTI OFFERTI**]{style="color: #0a41a8"}
+
+
+- RIPRODUCIBILITÀ ≈ Tenere traccia (ordinata) di tutte le componenti di un progetto di analisi:
+    - dati (grezzi e lavorati), metadati
+    - procedure
+    - risultati
+    
+- È un lavoro, ma premia in caso di collaborazione/ aggiornamento analisi/ *auditing*...
+
+- Si può iniziare a implementare queste pratiche un po' alla volta, e a partire dagli strumenti in dotazione 
+
+#### [**DA APPROFONDIRE...**]{style="color: #a80b42"}
+- Rapporto tra ricerca "riproducibile" & "aperta"?
+    - *data ownership*
+    - *privacy* (dati sensibili)
+    - rischio reputazionale
+- Rapporto tra analisi riproducibile e divulgazione risultati
+    - visualizzazione dei dati, ecc.
+- Riproducibilita non e' solo *literate programming*... importanza di strumenti per *workflow management* (make, targets etc)
+- Scelta di strumenti (software e piattaforme) idonei  
+
+
+:::
+
+::: notes
++ COSA 
++ PERCHE VAL LA PENA
++ COME USARLA
++ QUESTIONI APERTE 
+
+In realtà, - \[anonomization/privacy \] è evidentemente in tensione con il principio della trasparenza - però la riproducibilità è fare tutti i passi perchè si possa anche solo in modo selezionato condividere
+
+-   Intellectual Property, Licensing and Openness
+
+:::
+
+## Riferimenti bibliografici
+
+::: {style="font-size: 55%"}
++ The Turing Way Community. (2022). ***The Turing Way: A handbook for reproducible, ethical and collaborative research***. Zenodo. [https://doi.org/10.5281/ZENODO.3233853](https://doi.org/10.5281/ZENODO.3233853)
++ Broman, K. (2015). ***Initial steps toward reproducible research***. [https://kbroman.org/steps2rr/](https://kbroman.org/steps2rr/)
++ Berkeley Initiative for Transparency in the Social Sciences. (2022, ottobre 4). [https://www.bitss.org/](https://www.bitss.org/)
++ Wickham, H. (2014). ***Tidy data***. The Journal of Statistical Software, vol. 59, 2014. [https://vita.had.co.nz/papers/tidy-data.pdf](https://vita.had.co.nz/papers/tidy-data.pdf)
++ Bryan, J. (2022). ***How to name files***. Video: [https://www.youtube.com/watch?v=ES1LTlnpLMk](https://www.youtube.com/watch?v=ES1LTlnpLMk)
++ British Ecological Society. (2017). ***A Guide to Reproducible Code in Ecology and Evolution***. [https://colauttilab.github.io/Readings/BES-Reproducible-Code.pdf](https://colauttilab.github.io/Readings/BES-Reproducible-Code.pdf)
++ [World Bank DIME](https://www.worldbank.org/en/research/dime/data-and-analytics)
+<!-- Maria Ruth Jones, Roshni Khincha,  -->
+:::
+
+
+::: footer
+[Grazie per l'attenzione!]{style="color: #e60066"}
+:::
+
+
+## ANNEXES 
+
+
+## Il dataset ideale
+
+::: {style="font-size: 50%"}
+
+WE SHOULD SEEK DATA THAT IS:
+
+1.**MACHINE-READABLE** Data that can be read and correctly processed by a machine, like your computer.
+
+   + (a screenshot of that spreadsheet will look identical to the original spreadsheet, but it is not a machine-readable data format)
+  
+2. **REUSABLE** Data that you can use, remix, visualize, and publish without getting into legal trouble.
+
+      + license 
+  
+3. **DOCUMENTED** Data that contains metadata and information about how it came to be.
+
+      + metadata & information 
+      + the methodology used for the data collection
+      + the data dictionary (names of the variables/column names and what they stand for, and their data type)
+      + possible gaps, limitations, and NULL values;
+      + why the data was collected;
+      + on external sources of data used, if any;
+      + on the standards and conventions used
+
+::: 
+
+## REUSABLE: license 
+::: {style="font-size: 50%"}
+
+SPECIFICATIONS TO A **CREATIVE COMMONS** CC LICENSE
+
++ CC0: the author waivers his rights on the work, making it free to use just like public domain works.
++ -BY: you can share and adapt the work as long as you give appropriate credit to the author. (see the link to make sure you + u nderstand what this means)
++ -SA: you can share and adapt the work as long as you share the work you derive from it with the same license.●-ND: you can + s hare the work in any medium and for any purpose but can’t create derivative works.
++ -NC: you can share and adapt the work as long as you don’t do it for commercial purposes
+
+OTHER 
+
++ Open Data Commons Licences
++ or country-specific licenses for releasing open data (like IODL, Italian Open Data Licence).
+::: 
+
+## DOCUMENTED: exe Zotero  
+::: {style="font-size: 50%"}
+
+.... 
+
+::: 

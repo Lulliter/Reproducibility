@@ -1,0 +1,51 @@
+
+
+.border {
+  border: 1px solid #dee2e6;
+}
+
+.border-thick {
+  border-width: 3px;
+}
+
+.title {
+  font-size: 50px  ;
+  color: #455A8B;
+}
+
+.subtitle {
+  font-size: 40px  ;
+  color: #455A8B  ;
+}
+
+.quarto-title-author-name {
+  font-size: 40px;
+  color: #BD8723  ;
+}
+
+.date {
+  font-size: 40px;
+  color: #854442;
+}
+
+/*-- scss:defaults --*/
+
+$body-bg: #f3e1be; /* #b7b09c; */
+$body-color: #213144; /*#455A8B33; /* #4e3629;*/
+$link-color: #854260; /* #ffc72c;*/
+$presentation-heading-color: #455A8B33; /* #cc0000;*/
+$code-color: #856642; /* #cc0000;*/
+$code-block-bg: #F2F2F2; /*#eee6dc; #ded9ca;*/
+$code-block-border-color: #443421 ;/* #4c4c4c ;/* #000000;*/
+
+.sectionhead {
+  font-size: 1em;
+  text-align: center;
+  color: $presentation-heading-color;
+  font-family: $presentation-heading-font;
+  background-color: $body-bg;
+  margin: 1px;
+  padding: 2px 2px 2px 2px;
+  width: 120px;
+  border-left: 10px solid;
+}
